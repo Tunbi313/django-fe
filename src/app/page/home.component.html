@@ -1,0 +1,92 @@
+<main id="content" class="wrapper layout-page">
+		<section class="page-title z-index-2 position-relative" data-animated-id="1">
+    
+    <div class="bg-body-secondary">
+        <div class="container">
+            <nav class="py-4 lh-30px" aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center py-1">
+                    <li class="breadcrumb-item active" aria-current="page"> Home</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <div class="text-center py-13">
+        <div class="container">
+            <h2 class="mb-0">Shop Glowing</h2></div>
+    </div>
+</section>
+<section class="container container-xxl" data-animated-id="2">
+    <div class="tool-bar mb-11 align-items-center justify-content-between d-lg-flex">
+        <div class="tool-bar-left mb-6 mb-lg-0 fs-18px">We found <span class="text-body-emphasis fw-semibold">{{products.length}}</span> products available for you</div>
+        <div class="tool-bar-right align-items-center d-lg-flex">
+            <ul class="list-unstyled d-flex align-items-center list-inline me-lg-7 me-0 mb-6 mb-lg-0">
+                
+                <li class="list-inline-item d-lg-none ms-auto">
+                    <a (click)="onFilter()" class="btn btn-hover-border-primary btn-hover-bg-primary btn-hover-text-light btn-dark"> Filter</a>
+                </li>
+            </ul>
+<ul class="list-unstyled d-flex align-items-center list-inline mb-0">
+                <li class="list-inline-item me-0 w-100 w-lg-auto">
+                    <select class="form-select w-100 w-lg-auto" name="orderby" (change)="onSortChange($event)">
+                        <option value="">Default sorting</option>
+                        <option value="price">Sort by price: low to high</option>
+                        <option value="price-desc">Sort by price: high to low</option>
+                    </select>
+                </li><li class="list-inline-item d-none d-lg-block ms-7">
+                    <a (click)="onFilter()" class="btn btn-hover-border-primary btn-hover-bg-primary btn-hover-text-light btn-dark">
+                            
+                        Filter</a>
+                </li></ul>
+        </div>
+    </div>
+</section><div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasExample" aria-labelledby="offcanvasExampleLabel" data-animated-id="3">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title fs-3" id="offcanvasExampleLabel">Filter</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        
+	
+
+
+
+<aside class="primary-sidebar ">
+		
+	
+	
+	
+</aside>
+
+
+    </div>
+</div>
+
+<div class="container container-xxl pb-16 pb-lg-18 mb-lg-3" data-animated-id="4">
+    <div class="row gy-50px">
+        <div class="col-sm-6  col-lg-4 col-xl-3" *ngFor="let product of filteredProducts">
+                <div class="card card-product grid-1 bg-transparent border-0 animate__fadeInUp animate__animated" data-animate="fadeInUp">
+	   <figure class="card-img-top position-relative mb-7 overflow-hidden ">
+		   <a [routerLink]="['/detail', product.id]" class="hover-zoom-in d-block" [title]="product.name">
+    <img [src]="product.image"
+    (error)="onImgError($event)"
+    class="img-fluid w-100 product-img-small" 
+    [alt]="product.name" 
+    width="330" height="440" >
+</a>
+	   </figure>
+
+
+	   <div class="card-body text-center p-0">
+<span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
+        <ins class="text-decoration-none">{{product.price | currency:'USD':'symbol':'1.2-2'}}</ins></span>
+
+	   <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3"><a class="text-decoration-none text-reset" [routerLink]="['/detail', product.id]">{{ product.name }}</a></h4>
+	   <div class="d-flex align-items-center fs-12px justify-content-center">
+	
+	</div>
+</div>
+	   </div>
+</div>
+</div>
+</div>
+</main>

@@ -1,0 +1,64 @@
+<main id="content" class="wrapper layout-page">
+		<section class="z-index-2 position-relative pb-2 mb-12">
+    
+    <div class="bg-body-secondary mb-3">
+        <div class="container">
+            <nav class="py-4 lh-30px" aria-label="breadcrumb">
+                <ol class="breadcrumb justify-content-center py-1 mb-0">
+                    <li class="breadcrumb-item"><a title="Home" href="/">Home</a></li>
+                    
+                    <li class="breadcrumb-item active" aria-current="page">{{ product?.name }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+</section>
+<section class="container pt-6 pb-13 pb-lg-20" data-animated-id="2" *ngIf="product">
+<div class="row ">
+    <div class="col-md-6 pe-lg-13">
+        <img [src]="product.image ? product.image : 'assets/images/products/giay.jpg'" width="540" height="720" class="h-auto lazy-image" [alt]="product.name">
+    </div>
+    <div class="col-md-6 pt-md-0 pt-10">
+         <p class="d-flex align-items-center mb-6">
+			<span class="text-decoration-line-through">39.00</span>
+		<span class="fs-18px text-body-emphasis ps-6 fw-bold">{{product.price | currency:'USD':'symbol':'1.2-2'}}</span>
+	<span class="badge text-bg-primary fs-6 fw-semibold ms-7 px-6 py-3">10%</span>
+</p>
+        <h1 class="mb-4 pb-2 fs-4">{{product.name}}</h1>
+    <div class="d-flex align-items-center fs-15px mb-6">
+		<p class="mb-0 fw-semibold text-body-emphasis">4.86 </p>
+	<div class="d-flex align-items-center fs-12px justify-content-center mb-0 px-6 rating-result">
+	<div class="rating">
+		
+	</div></div>
+		<a href="#" class="border-start ps-6 text-body">Read 2947 reviews</a>
+</div>
+        <p class="fs-15px">{{ product.description }}</p>
+        <p class="text-body-emphasis fw-semibold mb-6">Quantity: {{product.quantity}} </p>
+        <div class="input-group position-relative w-100 input-group-lg">
+			<a href="#" class="shop-down position-absolute translate-middle-y top-50 start-0 ps-7 product-info-2-minus"><i class="far fa-minus"></i></a>
+			<input name="number" type="number" id="number" class="product-info-2-quantity form-control w-100 px-6 text-center" value="1" required="">
+			<a href="#" class="shop-up position-absolute translate-middle-y top-50 end-0 pe-7 product-info-2-plus"><i class="far fa-plus"></i>
+			</a>
+		</div>
+            <div class="form-checkmb-2 pb-4">
+			<input type="radio" id="buy1" name="quality" class="me-4 form-check-input product-info-input" checked>
+			<label for="buy1" class="text-body-emphasis form-check-label">
+				Buy 1 -
+				<span class="text-decoration-line-through mx-3 text-body">$39.00</span>
+				<span class="fw-bold">{{product.price | currency:'USD':'symbol':'1.2-2'}}</span>
+			</label>
+			<span class="badge badge-primary fs-12px border text-primary fw-bold ms-4">Saved 10%</span>          
+		</div>
+        <button type="submit" class="btn btn-lg btn-dark mb-7 mt-7 w-100 btn-hover-bg-primary btn-hover-border-primary">Add To Order</button>
+    </div>
+</div>
+</section>
+<section *ngIf="!product">
+    <div class="container">
+        <p>Product not found.</p>
+    </div>
+</section>
+</main>
+
+

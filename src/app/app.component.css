@@ -1,0 +1,9 @@
+.product-img-small {
+    max-width:180px;
+    max-height:240px;
+    width:100%;
+    height:auto;
+    margin:0 auto;
+    display:block;
+    
+}
