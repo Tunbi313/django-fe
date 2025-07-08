@@ -15,6 +15,8 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class ProductComponent implements OnInit {
   product: any = null;
+  quantity: number = 1;
+  message: string = '';
 
   constructor(private authService: AuthService, private route: ActivatedRoute) {}
 
@@ -30,5 +32,17 @@ export class ProductComponent implements OnInit {
         }
       });
     }
+  }
+
+  addToCart() {
+    if (!this.product) return;
+    this.authService.addToCart(this.product.id, this.quantity).subscribe({
+      next: (res) => {
+        this.message = res.message || 'Đã thêm vào giỏ hàng';
+      },
+      error: (err) => {
+        this.message = err.error?.error || 'Có lỗi xảy ra';
+      }
+    });
   }
 }

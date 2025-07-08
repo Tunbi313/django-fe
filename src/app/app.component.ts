@@ -17,6 +17,6 @@ export class AppComponent {
   constructor(public router: Router) {}
 
   isAdminRoute() {
-    return this.router.url.startsWith('/admin') || this.router.url.startsWith('/add_product') || this.router.url.startsWith('/update_product');
+    return this.router.url.startsWith('/admin') || this.router.url.startsWith('/add_product') || this.router.url.startsWith('/update_product') || this.router.url.startsWith('/orderList');
   }
 }

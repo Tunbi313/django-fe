@@ -34,6 +34,7 @@ export class AuthService {
     return this.http.put(`${this.apiUrl}/products/${product.id}/`, product, { headers });
   }
 
+
   // Lấy thông tin user từ localStorage
   getUserInfo(): any {
     const userInfo = localStorage.getItem('userInfo');
@@ -67,5 +68,18 @@ export class AuthService {
 
   deleteProduct(productId: number) {
     return this.http.delete(`${this.apiUrl}/products/${productId}/`);
+  }
+   // Thêm sản phẩm vào giỏ hàng
+  addToCart(product_id: number, quantity: number = 1): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.post(
+      `${this.apiUrl}/cart/add/`,
+      { product_id, quantity },
+      { headers }
+    );
   }
 }   

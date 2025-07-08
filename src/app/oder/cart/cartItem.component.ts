@@ -9,7 +9,7 @@ import { RouterLink } from '@angular/router';
   selector: 'app-oderItem',
   standalone: true,
   imports: [CommonModule, FormsModule, RouterModule],
-  templateUrl: './orderItem.component.html',
-  styleUrls: ['./orderItem.component.css']
+  templateUrl: './cartItem.component.html',
+  styleUrls: ['./cartItem.component.css']
 })
-export class OrderItemComponent  {}
+export class CartItemComponent  {}
