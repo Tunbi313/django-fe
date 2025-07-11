@@ -27,13 +27,20 @@
 					<div class="row">
 		<div class="col">
 			
-			<ul class="list-unstyled">
-			<!-- Hiển thị Login nếu chưa đăng nhập -->
-			<li *ngIf="!authService.isLoggedIn()"><a href="login" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">LOGIN</span></a></li>
-			<!-- Hiển thị Logout nếu đã đăng nhập -->
-			<li *ngIf="authService.isLoggedIn()"><a href="#" (click)="logout()" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">LOGOUT</span></a></li>
-			
+			<ul class="list-unstyled mb-0">
+				<li *ngIf="authService.isLoggedIn() && authService.isAdmin()" class="admin-manage-item">
+					<a href="#" (click)="goToAdminManage()" class="admin-manage-link">
+						ADMIN MANAGE
+					</a>
+				</li>
+				<li *ngIf="!authService.isLoggedIn()">
+					<a href="login" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">LOGIN</span></a>
+				</li>
+				<li *ngIf="authService.isLoggedIn()">
+					<a href="#" (click)="logout()" class="border-hover text-decoration-none py-3 d-block"><span class="border-hover-target">LOGOUT</span></a>
+				</li>
 			</ul>
+			
 		</div>
 		<div class="col">
 			<!-- Hiển thị Register nếu chưa đăng nhập -->
@@ -60,14 +67,14 @@
 						</a>
 					</div>
 					<div class="px-5 d-none d-xl-inline-block">
-						<a class="lh-1 color-inherit text-decoration-none" href="#" data-bs-toggle="modal" data-bs-target="#signInModal">
+						<a class="lh-1 color-inherit text-decoration-none" href="#" (click)="onUserIconClick()">
 							<svg class="icon icon-user-light">
 								<use xlink:href="#icon-user-light"></use>
 							</svg>
 						</a>
 					</div>
 					<div class="px-5 d-none d-xl-inline-block">
-						<a class="position-relative lh-1 color-inherit text-decoration-none" [routerLink]="['/cart']">
+						<a class="position-relative lh-1 color-inherit text-decoration-none" href="#" (click)="goToCart()">
 							<svg class="icon icon-star-light">
 								<use xlink:href="#icon-shopping-bag-open-light"></use>
 							</svg>

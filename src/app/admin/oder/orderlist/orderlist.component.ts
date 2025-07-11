@@ -4,14 +4,32 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, RouterOutlet } from '@angular/router';
 import { SidebarComponent } from '../../../component/sidebar/sidebar';
+import { HeaderAdminComponent } from '../../../component/header-admin/header-admin.component';
+import { AuthService } from '../../../api/auth.service';
 
 @Component({
   selector: 'app-oderlist',
   standalone: true,
-  imports:[CommonModule, FormsModule, RouterModule,SidebarComponent],
+  imports:[CommonModule, FormsModule, RouterModule,SidebarComponent,HeaderAdminComponent],
   templateUrl:'orderlist.component.html',
   styleUrls: ['./orderlist.component.css'],
-  
-
 })
-export class OrderListComponent {}
+export class OrderListComponent {
+  orders: any[] = [];
+  error: string = '';
+
+  constructor(private authService: AuthService) {
+    this.loadOrders();
+  }
+
+  loadOrders() {
+    this.authService.getAllOrdersAdmin().subscribe({
+      next: (data) => {
+        this.orders = Array.isArray(data) ? data : (data.results || []);
+      },
+      error: (err) => {
+        this.error = err.error?.detail || 'Không thể lấy danh sách đơn hàng';
+      }
+    });
+  }
+}

@@ -34,7 +34,6 @@ export class AuthService {
     return this.http.put(`${this.apiUrl}/products/${product.id}/`, product, { headers });
   }
 
-
   // Lấy thông tin user từ localStorage
   getUserInfo(): any {
     const userInfo = localStorage.getItem('userInfo');
@@ -52,6 +51,12 @@ export class AuthService {
     return userInfo ? userInfo.username : '';
   }
 
+  // Kiểm tra xem user có phải là admin không
+  isAdmin(): boolean {
+    const userInfo = this.getUserInfo();
+    return userInfo ? !!userInfo.is_admin : false;
+  }
+
   // Đăng xuất
   logout(): void {
     localStorage.removeItem('authToken');
@@ -62,14 +67,29 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/products/`);
   }
 
+  getAllProducts(): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = token ? new HttpHeaders({ Authorization: `Token ${token}` }) : undefined;
+    return this.http.get(`${this.apiUrl}/products/all/`, { headers });
+  }
+
+  getProductsPage(page: number = 1): Observable<any> {
+    return this.http.get(`${this.apiUrl}/products/?page=${page}`);
+  }
+
   getProductById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/products/${id}/`);
   }
 
-  deleteProduct(productId: number) {
-    return this.http.delete(`${this.apiUrl}/products/${productId}/`);
+  deleteProduct(id: number): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.delete(`http://localhost:8000/api/products/${id}/`, { headers });
   }
-   // Thêm sản phẩm vào giỏ hàng
+
+  // Thêm sản phẩm vào giỏ hàng
   addToCart(product_id: number, quantity: number = 1): Observable<any> {
     const token = localStorage.getItem('authToken');
     const headers = new HttpHeaders({
@@ -82,4 +102,131 @@ export class AuthService {
       { headers }
     );
   }
+
+  // Lấy giỏ hàng của user
+  getCart(): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/cart/`, { headers });
+  }
+
+  // Cập nhật số lượng sản phẩm trong giỏ hàng
+  updateCartItem(item_id: number, quantity: number): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`,
+      'Content-Type': 'application/json'
+    });
+    return this.http.put(
+      `${this.apiUrl}/cart/item/${item_id}/update/`,
+      { quantity },
+      { headers }
+    );
+  }
+
+  // Xóa một sản phẩm khỏi giỏ hàng
+  deleteCartItem(item_id: number): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.delete(`${this.apiUrl}/cart/item/${item_id}/remove/`, { headers });
+  }
+
+  clearCart(): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.delete(`${this.apiUrl}/cart/remove/`, { headers });
+  }
+
+  // Lấy profile người dùng
+  getProfile(): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/profile/`, { headers });
+  }
+
+  // Cập nhật profile (PUT)
+  updateProfile(data: any): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.put(`${this.apiUrl}/profile/`, data, { headers });
+  }
+
+  // Tạo mới profile (POST)
+  createProfile(data: any): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.post(`${this.apiUrl}/profile/`, data, { headers });
+  }
+
+  // Tạo order từ cart (checkout)
+  checkoutOrder(): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.post(`${this.apiUrl}/orders/checkout/`, {}, { headers });
+  }
+
+  // Lấy chi tiết order theo id
+  getOrderById(id: string): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/orders/${id}/`, { headers });
+  }
+
+  // Cập nhật order
+  updateOrder(orderId: string, data: any): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.patch(`${this.apiUrl}/orders/${orderId}/`, data, { headers });
+  }
+
+  payOrder(orderId: string): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.post(`${this.apiUrl}/orders/${orderId}/pay/`, {}, { headers });
+  }
+  getOrderByUser(): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization':`Token ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/orders/`, {headers});
+  }
+  
+  // Lấy tất cả order cho admin
+  getAllOrdersAdmin(): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/admin/orders/`, { headers });
+  }
+  //Lấy tất cả UserProfile
+  getAllUserProfile(): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.get(`${this.apiUrl}/admin/userprofiles/`,{headers});
+  }
+  
 }   

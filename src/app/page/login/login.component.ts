@@ -37,9 +37,11 @@ export class LoginComponent {
           localStorage.setItem('userInfo', JSON.stringify(res.user));
           console.log('User info:', res.user);
 
-          // Nếu là admin thì chuyển hướng sang trang quản lý sản phẩm
-          if (res.user && (res.user.role === 'admin' || res.user.is_admin === true)) {
+          // Điều hướng dựa trên quyền admin
+          if (res.user && res.user.is_admin === true) {
             this.router.navigate(['/admin']);
+          } else {
+            this.router.navigate(['/']);
           }
         },
         error: (err) => { 

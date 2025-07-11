@@ -4,10 +4,11 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../../component/sidebar/sidebar';
 import { AuthService } from '../../../api/auth.service';
+import { HeaderAdminComponent } from '../../../component/header-admin/header-admin.component';
 
 @Component({
   selector: 'app-add_product',
-  imports:[RouterOutlet,FormsModule,RouterModule,CommonModule,SidebarComponent],
+  imports:[RouterOutlet,FormsModule,RouterModule,CommonModule,SidebarComponent,HeaderAdminComponent],
   templateUrl: './add_product.component.html',
   styleUrls: ['./add_product.component.css'],
   standalone: true,

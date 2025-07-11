@@ -17,30 +17,39 @@ export class HomeComponent implements OnInit {
   sortOrder: string = '';
   products: any[] = [];
   filteredProducts: any[] = [];
+  currentPage: number = 1;
+  totalPages: number = 1;
+  totalProducts: number = 0;
 
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
-    this.loadProducts();
-    this.filteredProducts = this.products.slice();
+    this.loadProducts(1);
   }
 
   onImgError(event: any) {
     event.target.src = 'assets/images/products/giay.jpg'; // Ảnh mặc định
   }
 
-  loadProducts(): void {
-    this.authService.getProducts().subscribe({
+  loadProducts(page: number = 1): void {
+    this.authService.getProductsPage(page).subscribe({
       next: (data: any) => {
-        this.products = data.map((item: any) => ({
+        const productsArray = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.results)
+            ? data.results
+            : [];
+        this.products = productsArray.map((item: any) => ({
           ...item,
           image: item.image ? item.image : 'assets/images/products/giay.jpg'
         }));
-        console.log('Products loaded:', this.products);
         this.filteredProducts = this.products.slice();
+        this.currentPage = page;
+        this.totalPages = Math.ceil(data.count / productsArray.length);
+        this.totalProducts = data.count; // Cập nhật tổng số sản phẩm
       },
       error: (error: any) => {
-        console.error('Error loading products:', error);
+        console.error('Lỗi khi tải sản phẩm:', error);
       }
     });
   }
@@ -56,5 +65,10 @@ export class HomeComponent implements OnInit {
     } else if (this.sortOrder === 'price-desc') {
       this.filteredProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
     }
+  }
+
+  goToPage(page: number) {
+    if (page < 1 || page > this.totalPages) return;
+    this.loadProducts(page);
   }
 }

@@ -45,4 +45,16 @@ export class ProductComponent implements OnInit {
       }
     });
   }
+
+  increaseQuantity() {
+    if (this.product && this.quantity < this.product.quantity) {
+      this.quantity++;
+    }
+  }
+
+  decreaseQuantity() {
+    if (this.quantity > 1) {
+      this.quantity--;
+    }
+  }
 }

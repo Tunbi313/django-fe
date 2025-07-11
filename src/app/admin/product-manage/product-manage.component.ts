@@ -4,25 +4,29 @@ import { RouterModule, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../api/auth.service';
 import { CommonModule } from '@angular/common';
 import { SidebarComponent } from '../../component/sidebar/sidebar';
+import { HeaderAdminComponent } from '../../component/header-admin/header-admin.component';
 
 
 @Component({
   selector: 'app-product-manage',
-  imports:[RouterOutlet,FormsModule,RouterModule,CommonModule,SidebarComponent],
+  imports:[RouterOutlet,FormsModule,RouterModule,CommonModule,SidebarComponent,HeaderAdminComponent],
   templateUrl: './product-manage.component.html',
   styleUrls: ['./product-manage.component.css'],
   standalone: true,
 })
 export class ProductManageComponent implements OnInit {
   products: any[] =[];
-
+  showDeleteModal: boolean = false;
+  productToDelete: any = null;
+  showSuccessMessage: boolean = false;
+  
   constructor(private authService:AuthService){}
   ngOnInit() : void{
     this.loadProducts();
   }
-  loadProducts(): void{
-    this.authService.getProducts().subscribe({
-      next: (data: any) => {
+  loadProducts(): void {
+    this.authService.getAllProducts().subscribe({
+      next: (data: any[]) => {
         this.products = data.map((item: any) => ({
           ...item,
           image: item.image ? item.image : 'assets/images/products/giay.jpg'
@@ -35,19 +39,39 @@ export class ProductManageComponent implements OnInit {
     });
   }
 
-  deleteProduct(productId: number) {
-    if (confirm('Bạn có chắc chắn muốn xóa sản phẩm này?')) {
-      this.authService.deleteProduct(productId).subscribe({
-        next: () => {
-          // Xóa thành công, cập nhật lại danh sách
-          this.products = this.products.filter(product => product.id !== productId);
-          alert('Đã xóa sản phẩm thành công!');
+  onDeleteProduct(productId: number) {
+    // Tìm sản phẩm cần xóa để hiển thị tên trong modal
+    this.productToDelete = this.products.find(p => p.id === productId);
+    this.showDeleteModal = true;
+  }
+
+  confirmDelete() {
+    if (this.productToDelete) {
+      this.authService.deleteProduct(this.productToDelete.id).subscribe({
+        next: (res) => {
+          console.log('Xóa thành công', res);
+          this.showDeleteModal = false;
+          this.showSuccessMessage = true;
+          
+          // Ẩn thông báo thành công sau 3 giây
+          setTimeout(() => {
+            this.showSuccessMessage = false;
+          }, 3000);
+          
+          // Cập nhật lại danh sách sản phẩm
+          this.loadProducts();
         },
         error: (err) => {
-          alert('Xóa sản phẩm thất bại!');
-          console.error(err);
+          console.error('Lỗi khi xóa sản phẩm', err);
+          this.showDeleteModal = false;
         }
       });
     }
   }
+
+  cancelDelete() {
+    this.showDeleteModal = false;
+    this.productToDelete = null;
+  }
 }
+

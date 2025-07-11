@@ -17,7 +17,7 @@
 </section>
 <section class="container container-xxl" data-animated-id="2">
     <div class="tool-bar mb-11 align-items-center justify-content-between d-lg-flex">
-        <div class="tool-bar-left mb-6 mb-lg-0 fs-18px">We found <span class="text-body-emphasis fw-semibold">{{products.length}}</span> products available for you</div>
+        <div class="tool-bar-left mb-6 mb-lg-0 fs-18px">We found <span class="text-body-emphasis fw-semibold">{{totalProducts}}</span> products available for you</div>
         <div class="tool-bar-right align-items-center d-lg-flex">
             <ul class="list-unstyled d-flex align-items-center list-inline me-lg-7 me-0 mb-6 mb-lg-0">
                 
@@ -89,4 +89,21 @@
 </div>
 </div>
 </div>
+<nav class="d-flex mt-13 pt-3 justify-content-center animate__fadeInUp animate__animated" aria-label="pagination" data-animate="fadeInUp">
+  <ul class="pagination m-0">
+    <li class="page-item" [class.disabled]="currentPage === 1">
+      <a class="page-link" href="#" (click)="goToPage(currentPage - 1); $event.preventDefault()" aria-label="Previous">
+        &laquo;
+      </a>
+    </li>
+    <li class="page-item" *ngFor="let page of [].constructor(totalPages); let i = index" [class.active]="currentPage === (i+1)">
+      <a class="page-link" href="#" (click)="goToPage(i+1); $event.preventDefault()">{{i+1}}</a>
+    </li>
+    <li class="page-item" [class.disabled]="currentPage === totalPages">
+      <a class="page-link" href="#" (click)="goToPage(currentPage + 1); $event.preventDefault()" aria-label="Next">
+        &raquo;
+      </a>
+    </li>
+  </ul>
+</nav>
 </main>

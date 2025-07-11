@@ -1,9 +1,17 @@
+
 <div class="wrapper dashboard-wrapper">
 		<div class="d-flex flex-wrap flex-xl-nowrap">
 			<app-sidebar></app-sidebar>
 			<div class="page-content">
+				<app-headeradmin></app-headeradmin>
 				<main id="content" class="bg-body-tertiary-01 d-flex flex-column main-content">
 					<div class="dashboard-page-content">
+
+						<!-- Thông báo thành công -->
+						<div *ngIf="showSuccessMessage" class="alert alert-success alert-dismissible fade show" role="alert">
+							<strong>Thành công!</strong> Sản phẩm đã được xóa thành công.
+							<button type="button" class="btn-close" (click)="showSuccessMessage = false"></button>
+						</div>
 
 						<div class="row mb-9 align-items-center justify-content-between">
 
@@ -32,7 +40,7 @@
 								</div>
 							</div>
 							<div class="card-body px-0 pt-7 pb-0">
-								<div class="table-responsive">
+								<div class="table-responsive table-scroll">
 									<table class="table table-hover align-middle table-nowrap mb-0">
 										<tbody>
 											<tr *ngFor="let product of products">
@@ -61,11 +69,11 @@
 														<a [routerLink]="['/update_product',product.id]"
 															class="btn btn-primary py-4 px-5 btn-xs fs-13px me-4"><i
 																class="far fa-pen me-2"></i> Edit</a>
-														<a href="#"
-															(click)="deleteProduct(product.id)"
+														<button type="button"
+															(click)="onDeleteProduct(product.id)"
 															class="btn btn-outline-primary btn-hover-bg-danger btn-hover-border-danger btn-hover-text-light py-4 px-5 fs-13px btn-xs me-4">
 															<i class="far fa-trash me-2"></i> Delete
-														</a>
+														</button>
 													</div>
 												</td>
 											</tr>
@@ -77,19 +85,33 @@
 						</div>
 
 						<nav aria-label="Page navigation example" class="mt-6 mb-4">
-							<ul class="pagination justify-content-start">
-								<li class="page-item active mx-3"><a class="page-link" href="#">01</a></li>
-								<li class="page-item mx-3"><a class="page-link" href="#">02</a></li>
-								<li class="page-item mx-3"><a class="page-link" href="#">03</a></li>
-								<li class="page-item mx-3"><a class="page-link dot" href="#">...</a></li>
-								<li class="page-item mx-3"><a class="page-link" href="#">16</a></li>
-								<li class="page-item mx-3">
-									<a class="page-link" href="#"><i class="far fa-chevron-right"></i></a>
-								</li>
-							</ul>
+							
 						</nav>
 					</div>
 				</main>
 			</div>
 		</div>
 	</div>
+
+	<!-- Modal xác nhận xóa -->
+	<div *ngIf="showDeleteModal" class="modal fade show" style="display: block;" tabindex="-1">
+		<div class="modal-dialog modal-dialog-centered">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h5 class="modal-title">Xác nhận xóa sản phẩm</h5>
+					<button type="button" class="btn-close" (click)="cancelDelete()"></button>
+				</div>
+				<div class="modal-body">
+					<p>Bạn có chắc chắn muốn xóa sản phẩm <strong>"{{productToDelete?.name}}"</strong> không?</p>
+					<p class="text-muted">Hành động này không thể hoàn tác.</p>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-secondary" (click)="cancelDelete()">Hủy</button>
+					<button type="button" class="btn btn-danger" (click)="confirmDelete()">Xóa sản phẩm</button>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- Backdrop cho modal -->
+	<div *ngIf="showDeleteModal" class="modal-backdrop fade show"></div>

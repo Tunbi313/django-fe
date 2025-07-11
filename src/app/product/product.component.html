@@ -36,10 +36,9 @@
         <p class="fs-15px">{{ product.description }}</p>
         <p class="text-body-emphasis fw-semibold mb-6">Quantity: {{product.quantity}} </p>
         <div class="input-group position-relative w-100 input-group-lg">
-			<a href="#" class="shop-down position-absolute translate-middle-y top-50 start-0 ps-7 product-info-2-minus"><i class="far fa-minus"></i></a>
+			<a href="#" class="shop-down position-absolute translate-middle-y top-50 start-0 ps-7 product-info-2-minus" (click)="decreaseQuantity(); $event.preventDefault()"><i class="far fa-minus"></i></a>
 			<input name="number" type="number" id="number" class="product-info-2-quantity form-control w-100 px-6 text-center" [(ngModel)]="quantity" min="1" [max]="product.quantity" required="">
-			<a href="#" class="shop-up position-absolute translate-middle-y top-50 end-0 pe-7 product-info-2-plus"><i class="far fa-plus"></i>
-			</a>
+			<a href="#" class="shop-up position-absolute translate-middle-y top-50 end-0 pe-7 product-info-2-plus" (click)="increaseQuantity(); $event.preventDefault()"><i class="far fa-plus"></i></a>
 		</div>
             <div class="form-checkmb-2 pb-4">
 			<input type="radio" id="buy1" name="quality" class="me-4 form-check-input product-info-input" checked>

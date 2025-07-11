@@ -2,10 +2,10 @@ import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-sidebar',
+  selector: 'app-headeradmin',
   standalone: true,
   imports: [RouterModule], // <-- BẮT BUỘC PHẢI CÓ DÒNG NÀY
-  templateUrl: './sidebar.component.html',
-  styleUrls: ['./sidebar.component.css']
+  templateUrl: './header-admin.component.html',
+  styleUrls: ['./header-admin.component.css']
 })
-export class SidebarComponent {}
+export class HeaderAdminComponent {}
