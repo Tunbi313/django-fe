@@ -32,4 +32,17 @@ export class OrderListComponent {
       }
     });
   }
+
+  deleteOrder(orderId: number) {
+    if (window.confirm('Bạn có chắc chắn muốn xóa đơn hàng này?')) {
+      this.authService.deleteOrderAdmin(orderId).subscribe({
+        next: () => {
+          this.orders = this.orders.filter(o => o.id !== orderId);
+        },
+        error: (err) => {
+          alert('Xóa đơn hàng thất bại: ' + (err.error?.detail || ''));
+        }
+      });
+    }
+  }
 }

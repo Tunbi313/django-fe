@@ -70,7 +70,7 @@
     <td>{{ order.created_at | date:'short' }}</td>
     <td class="text-center">
       <div class="d-flex flex-nowrap justify-content-center">
-        <a [routerLink]="['/paid', order.id]" class="btn btn-primary py-4 fs-13px btn-xs me-4">Detail</a>
+        <a [routerLink]="['/orderdetail',order.id]" class="btn btn-primary py-4 fs-13px btn-xs me-4">Detail</a>
         <div class="dropdown no-caret">
           <a href="#" data-bs-toggle="dropdown" class="dropdown-toggle btn btn-outline-primary btn-xs hover-white btn-hover-bg-primary py-4 px-5">
             <i class="far fa-ellipsis-h"></i>
@@ -78,7 +78,7 @@
           <div class="dropdown-menu dropdown-menu-end m-0">
             <a class="dropdown-item" [routerLink]="['/paid', order.id]">View detail</a>
             <a class="dropdown-item" href="#">Edit info</a>
-            <a class="dropdown-item text-danger" href="#">Delete</a>
+            <a class="dropdown-item text-danger" href="#" (click)="deleteOrder(order.id)">Delete</a>
           </div>
         </div>
       </div>

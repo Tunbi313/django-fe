@@ -228,5 +228,28 @@ export class AuthService {
     });
     return this.http.get(`${this.apiUrl}/admin/userprofiles/`,{headers});
   }
+
+  updateOrderInfo(orderId: number, data: any): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.put(`${this.apiUrl}/orders/${orderId}/update-info`, data, { headers });
+  }
   
+  deleteOrderAdmin(orderId: number): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.delete(`${this.apiUrl}/admin/orders/${orderId}/`, { headers });
+  }
+
+  markOrderDelivered(orderId: number): Observable<any> {
+    const token = localStorage.getItem('authToken');
+    const headers = new HttpHeaders({
+      'Authorization': `Token ${token}`
+    });
+    return this.http.patch(`${this.apiUrl}/admin/orders/${orderId}/`, { status: 'delivered' }, { headers });
+  }
 }   

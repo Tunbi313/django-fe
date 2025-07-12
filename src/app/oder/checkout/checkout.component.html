@@ -82,37 +82,27 @@
 
 
 <div class="mb-7">
-    <label class="mb-5 fs-13px letter-spacing-01 fw-semibold text-uppercase">name</label>
-    <div class="row">
-        <div class="col-md-6 mb-md-0 mb-7">
-            <input type="text" class="form-control" id="first-name" name="firstname" placeholder="First Name" required [(ngModel)]="shippingInfo.first_name">
-        </div>
-        <div class="col-md-6">
-            <input type="text" class="form-control" id="last-name" name="lasttname" placeholder="Last Name" required [(ngModel)]="shippingInfo.last_name">
-        </div>
-    </div>
+    <label class="mb-5 fs-13px letter-spacing-01 fw-semibold text-uppercase">Receiver Name</label>
+    <input type="text" class="form-control" id="receiver-name" name="receivername" placeholder="Receiver Name" required [(ngModel)]="shippingInfo.receiver_name" (blur)="updateOrderInfo()">
 </div>
 
 <div class="mb-7">
     <div class="row">
         <div class=" mb-md-0 mb-7">
-            <label for="street-address" class="mb-5 fs-13px letter-spacing-01 fw-semibold text-uppercase">Street	Address</label>
-            <input type="text" class="form-control" id="street-address" name="streetaddress" required [(ngModel)]="shippingInfo.address">
+            <label for="street-address" class="mb-5 fs-13px letter-spacing-01 fw-semibold text-uppercase">Street Address</label>
+            <input type="text" class="form-control" id="street-address" name="streetaddress" required [(ngModel)]="shippingInfo.address" (blur)="updateOrderInfo()">
         </div>
     </div>
 </div>
-
-
-
 
 <div class="mb-7">
     <label class="mb-5 fs-13px letter-spacing-01 fw-semibold text-uppercase">info</label>
     <div class="row">
         <div class="col-md-6 mb-md-0 mb-7">
-            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required [(ngModel)]="shippingInfo.email">
+            <input type="email" class="form-control" id="email" name="email" placeholder="Email" required [(ngModel)]="shippingInfo.email" (blur)="updateOrderInfo()">
         </div>
         <div class="col-md-6">
-            <input type="number" class="form-control" id="phone" name="phone" placeholder="Phone number" required [(ngModel)]="shippingInfo.phone">
+            <input type="number" class="form-control" id="phone" name="phone" placeholder="Phone number" required [(ngModel)]="shippingInfo.phone" (blur)="updateOrderInfo()">
         </div>
     </div>
 </div>

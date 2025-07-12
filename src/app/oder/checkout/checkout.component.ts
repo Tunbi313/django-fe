@@ -32,11 +32,10 @@ export class CheckOutComponent implements OnInit {
               this.order = order;
               this.orderItems = order.items || [];
               this.shippingInfo = {
-                first_name: order.user_profile?.first_name || '',
-                last_name: order.user_profile?.last_name || '',
-                address: order.user_profile?.address || '',
-                phone: order.user_profile?.phone || '',
-                email: order.user_profile?.email || ''
+                receiver_name: order.receiver_name || '',
+                address: order.address || '',
+                phone: order.phone || '',
+                email: order.email || ''
               };
             },
             error: () => {
@@ -60,5 +59,17 @@ export class CheckOutComponent implements OnInit {
           }
         });
       }
+    }
+
+    updateOrderInfo() {
+      if (!this.order?.id) return;
+      this.authservice.updateOrderInfo(this.order.id, this.shippingInfo).subscribe({
+        next: (res) => {
+          // Có thể hiện thông báo thành công nếu muốn
+        },
+        error: (err) => {
+          // Có thể hiện thông báo lỗi nếu muốn
+        }
+      });
     }
 }
