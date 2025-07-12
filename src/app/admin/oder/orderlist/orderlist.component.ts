@@ -17,13 +17,20 @@ import { AuthService } from '../../../api/auth.service';
 export class OrderListComponent {
   orders: any[] = [];
   error: string = '';
+  searchTerm: string = '';
 
   constructor(private authService: AuthService) {
     this.loadOrders();
   }
 
-  loadOrders() {
-    this.authService.getAllOrdersAdmin().subscribe({
+  onSearch(term: string) {
+    console.log('OrderList received search:', term); // Thêm log để debug
+    this.searchTerm = term;
+    this.loadOrders(term);
+  }
+
+  loadOrders(searchTerm: string = '') {
+    this.authService.getAllOrdersAdmin(searchTerm).subscribe({
       next: (data) => {
         this.orders = Array.isArray(data) ? data : (data.results || []);
       },

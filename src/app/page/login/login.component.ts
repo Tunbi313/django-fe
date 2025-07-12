@@ -29,13 +29,13 @@ export class LoginComponent {
         next: (res) => { 
           this.message = res.message; 
           
-          // Hiển thị token trong console
-          console.log('Token:', res.token);
-          
-          // Lưu token và thông tin user vào localStorage
-          localStorage.setItem('authToken', res.token);
-          localStorage.setItem('userInfo', JSON.stringify(res.user));
+          // Hiển thị tokens trong console
+          console.log('Access Token:', res.access);
+          console.log('Refresh Token:', res.refresh);
           console.log('User info:', res.user);
+          
+          // Lưu JWT tokens và thông tin user vào localStorage
+          this.authService.saveTokens(res.access, res.refresh, res.user);
 
           // Điều hướng dựa trên quyền admin
           if (res.user && res.user.is_admin === true) {
