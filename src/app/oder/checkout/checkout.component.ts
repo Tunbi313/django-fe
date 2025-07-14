@@ -50,11 +50,11 @@ export class CheckOutComponent implements OnInit {
     payOrder() {
       if (window.confirm('Bạn có chắc chắn muốn thanh toán đơn hàng này?')) {
         this.authservice.payOrder(this.order.id).subscribe({
-          next: (res) => {
+          next: (res: any) => {
             alert('Thanh toán thành công!');
             this.router.navigate(['/paid']);
           },
-          error: (err) => {
+          error: (err: any) => {
             alert('Có lỗi khi thanh toán đơn hàng! ' + (err.error?.error || ''));
           }
         });

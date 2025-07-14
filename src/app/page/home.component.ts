@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { AuthService } from '../api/auth.service';
 import { RouterModule } from '@angular/router';
 import { RouterLink } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home',
@@ -20,19 +21,41 @@ export class HomeComponent implements OnInit {
   currentPage: number = 1;
   totalPages: number = 1;
   totalProducts: number = 0;
+  product: any = null;
+  quantity: number = 1;
+  message: string = '';
+  searchTerm: string = '';
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private route: ActivatedRoute) {}
 
   ngOnInit(): void {
-    this.loadProducts(1);
+    // Lấy search term từ query string nếu có
+    this.route.queryParams.subscribe(params => {
+      this.searchTerm = params['search'] || '';
+      this.loadProducts(1);
+    });
   }
 
   onImgError(event: any) {
     event.target.src = 'assets/images/products/giay.jpg'; // Ảnh mặc định
   }
 
+  addToCart(product: any) {
+    if (!product) return;
+    this.authService.addToCart(product.id, 1).subscribe({
+      next: (res) => {
+        this.message = res.message || 'Đã thêm vào giỏ hàng';
+        setTimeout(() => this.message = '', 2000);
+      },
+      error: (err) => {
+        this.message = err.error?.error || 'Có lỗi xảy ra';
+        setTimeout(() => this.message = '', 2000);
+      }
+    });
+  }
+
   loadProducts(page: number = 1): void {
-    this.authService.getProductsPage(page).subscribe({
+    this.authService.getProducts({ page }).subscribe({
       next: (data: any) => {
         const productsArray = Array.isArray(data)
           ? data
@@ -45,8 +68,13 @@ export class HomeComponent implements OnInit {
         }));
         this.filteredProducts = this.products.slice();
         this.currentPage = page;
-        this.totalPages = Math.ceil(data.count / productsArray.length);
-        this.totalProducts = data.count; // Cập nhật tổng số sản phẩm
+        const pageSize = productsArray.length > 0 ? productsArray.length : 1;
+        this.totalPages = data.count ? Math.ceil(data.count / pageSize) : 1;
+        this.totalProducts = data.count || this.products.length;
+        // Nếu có searchTerm, tự động lọc
+        if (this.searchTerm && this.searchTerm.trim()) {
+          this.onSearch();
+        }
       },
       error: (error: any) => {
         console.error('Lỗi khi tải sản phẩm:', error);
@@ -65,6 +93,17 @@ export class HomeComponent implements OnInit {
     } else if (this.sortOrder === 'price-desc') {
       this.filteredProducts.sort((a, b) => parseFloat(b.price) - parseFloat(a.price));
     }
+  }
+
+  onSearch() {
+    const term = this.searchTerm.trim().toLowerCase();
+    if (!term) {
+      this.filteredProducts = this.products.slice();
+      return;
+    }
+    this.filteredProducts = this.products.filter(product =>
+      product.name && product.name.toLowerCase().includes(term)
+    );
   }
 
   goToPage(page: number) {

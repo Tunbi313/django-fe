@@ -38,7 +38,7 @@ export class LoginComponent {
           this.authService.saveTokens(res.access, res.refresh, res.user);
 
           // Điều hướng dựa trên quyền admin
-          if (res.user && res.user.is_admin === true) {
+          if (res.user && res.user.is_staff === true) {
             this.router.navigate(['/admin']);
           } else {
             this.router.navigate(['/']);

@@ -27,16 +27,29 @@ export class OderDetailComponent  implements OnInit {
         orderId = localStorage.getItem('lastOrderId');
       }
       if (orderId) {
-        this.authservice.getOrderById(orderId).subscribe({
-          next: (order) => {
-            this.order = order;
-            this.orderItems = order.items || [];
-            this.userProfile = order.user_profile || null;
-          },
-          error: () => {
-            this.message = 'Không tìm thấy đơn hàng.';
-          }
-        });
+        if (this.authservice.isAdmin()) {
+          this.authservice.getOrderByIdAdmin(Number(orderId)).subscribe({
+            next: (order) => {
+              this.order = order;
+              this.orderItems = order.items || [];
+              this.userProfile = order.user_profile || null;
+            },
+            error: () => {
+              this.message = 'Không tìm thấy đơn hàng.';
+            }
+          });
+        } else {
+          this.authservice.getOrderById(orderId).subscribe({
+            next: (order) => {
+              this.order = order;
+              this.orderItems = order.items || [];
+              this.userProfile = order.user_profile || null;
+            },
+            error: () => {
+              this.message = 'Không tìm thấy đơn hàng.';
+            }
+          });
+        }
       } else {
         this.message = 'Không tìm thấy đơn hàng.';
       }

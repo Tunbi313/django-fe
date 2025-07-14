@@ -26,8 +26,10 @@ export class ProductManageComponent implements OnInit {
   }
   loadProducts(): void {
     this.authService.getAllProducts().subscribe({
-      next: (data: any[]) => {
-        this.products = data.map((item: any) => ({
+      next: (data: any) => {
+        // data là mảng sản phẩm
+        const productsArray = Array.isArray(data) ? data : [];
+        this.products = productsArray.map((item: any) => ({
           ...item,
           image: item.image ? item.image : 'assets/images/products/giay.jpg'
         }));

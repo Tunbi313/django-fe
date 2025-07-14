@@ -137,8 +137,8 @@ export class CartItemComponent implements OnInit {
       return;
     }
     // Gọi API checkout
-    this.authService.checkoutOrder().subscribe({
-      next: (order) => {
+    this.authService.createOrder().subscribe({
+      next: (order: any) => {
         // Lưu orderId vào localStorage (xử lý cả trường hợp trả về order.order.id hoặc order.id)
         if (order.order && order.order.id) {
           localStorage.setItem('lastOrderId', order.order.id);
@@ -148,7 +148,7 @@ export class CartItemComponent implements OnInit {
         // Chuyển hướng sang trang checkout
         window.location.href = '/checkout';
       },
-      error: (err) => {
+      error: (err: any) => {
         this.message = err?.error?.error || 'Có lỗi khi tạo đơn hàng!';
       }
     });

@@ -33,8 +33,8 @@ export class UserProfileComponent implements OnInit {
         this.error = err.error?.detail || 'Không thể lấy thông tin người dùng';
       }
     });
-    this.authService.getOrderByUser().subscribe({
-      next: (order) => {
+    this.authService.getOrders().subscribe({
+      next: (order: any) => {
         // Đảm bảo order luôn là mảng
         const orderArray = Array.isArray(order)
           ? order
@@ -45,10 +45,10 @@ export class UserProfileComponent implements OnInit {
         this.totalOrder = orderArray.length;
         this.totalPrice = orderArray.reduce((sum: any, o: any) => sum + (parseFloat(o.total_price) || 0), 0);
       },
-      error:() =>{
+      error: (err: any) => {
         this.message ='Không tìm thấy đơn hàng nào'
       }
-    })
+    });
   }
 
   goToUpdateProfile() {
