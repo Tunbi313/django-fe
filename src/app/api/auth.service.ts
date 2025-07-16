@@ -165,9 +165,9 @@ export class AuthService {
     return this.http.get(`${this.apiUrl}/orders/`, { headers });
   }
 
-  createOrder(): Observable<any> {
+  createOrder(orderData: any = {}): Observable<any> {
     const headers = this.getAuthHeaders();
-    return this.http.post(`${this.apiUrl}/orders/checkout/`, {}, { headers });
+    return this.http.post(`${this.apiUrl}/orders/checkout/`, orderData, { headers });
   }
 
   getOrderById(id: string): Observable<any> {

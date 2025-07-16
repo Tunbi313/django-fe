@@ -22,6 +22,8 @@ export class CheckOutComponent implements OnInit {
       email: ''
     };
     message: string = '';
+    USD_TO_VND = 25000;
+    isPaying: boolean = false; // Thêm biến này để chặn double click
     constructor(private authservice: AuthService, private router: Router){}
     
     ngOnInit(): void {
@@ -48,16 +50,32 @@ export class CheckOutComponent implements OnInit {
     }
 
     payOrder() {
+      if (this.isPaying) return; // Chặn double click
+      this.isPaying = true;
+
       if (window.confirm('Bạn có chắc chắn muốn thanh toán đơn hàng này?')) {
-        this.authservice.payOrder(this.order.id).subscribe({
-          next: (res: any) => {
-            alert('Thanh toán thành công!');
-            this.router.navigate(['/paid']);
+        const priceVND = Math.round((this.order?.total_price || 0) * this.USD_TO_VND);
+        this.authservice.updateOrderInfo(this.order.id, { total_price: priceVND }).subscribe({
+          next: () => {
+            this.authservice.payOrder(this.order.id).subscribe({
+              next: (res: any) => {
+                alert('Thanh toán thành công!');
+                this.router.navigate(['/paid']);
+                this.isPaying = false;
+              },
+              error: (err: any) => {
+                alert('Có lỗi khi thanh toán đơn hàng! ' + (err.error?.error || ''));
+                this.isPaying = false;
+              }
+            });
           },
           error: (err: any) => {
-            alert('Có lỗi khi thanh toán đơn hàng! ' + (err.error?.error || ''));
+            alert('Có lỗi khi cập nhật giá đơn hàng! ' + (err.error?.error || ''));
+            this.isPaying = false;
           }
         });
+      } else {
+        this.isPaying = false;
       }
     }
 

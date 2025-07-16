@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import { Component, Output, EventEmitter, OnInit } from '@angular/core';
 import { RouterModule, Router } from '@angular/router';
 import { AuthService } from '../../api/auth.service';
 import { CommonModule } from '@angular/common';
@@ -11,11 +11,25 @@ import { FormsModule } from '@angular/forms';
   imports: [RouterModule, CommonModule, FormsModule],
   standalone:true
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   searchTerm: string = '';
   @Output() search = new EventEmitter<string>();
+  cartItemCount: number = 0;
 
   constructor(public authService: AuthService, private router: Router) {}
+
+  ngOnInit(): void {
+    if (this.authService.isLoggedIn()) {
+      this.authService.getCart().subscribe({
+        next: (cart) => {
+          this.cartItemCount = cart?.items ? cart.items.length : 0;
+        },
+        error: () => {
+          this.cartItemCount = 0;
+        }
+      });
+    }
+  }
 
   logout() {
     this.authService.logout().subscribe({
