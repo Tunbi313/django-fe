@@ -141,8 +141,9 @@ export class CartItemComponent implements OnInit {
     const totalUSD = this.cartData.items.reduce((total: number, item: any) => total + (item.product_price * item.quantity), 0);
     // Quy đổi sang VND
     const totalVND = Math.round(totalUSD * this.USD_TO_VND);
-    // Gọi API checkout, gửi giá VND
-    this.authService.createOrder({ total_price: totalVND }).subscribe({
+    console.log('Checkout data:', { total_price: totalVND });
+    // Gọi API checkout mà không truyền dữ liệu
+    this.authService.createOrder().subscribe({
       next: (order: any) => {
         // Lưu orderId vào localStorage (xử lý cả trường hợp trả về order.order.id hoặc order.id)
         if (order.order && order.order.id) {
@@ -154,6 +155,7 @@ export class CartItemComponent implements OnInit {
         window.location.href = '/checkout';
       },
       error: (err: any) => {
+        console.error('Checkout error:', err);
         this.message = err?.error?.error || 'Có lỗi khi tạo đơn hàng!';
       }
     });

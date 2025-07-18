@@ -6,10 +6,11 @@ import { CommonModule } from '@angular/common';
 import { HeaderComponent } from './component/header/header.component';
 import { FooterComponent } from './component/footer/footer.component';
 import { HomeComponent } from './page/home.component';
+import { ChatbotComponent } from './chatbot/chatbot.component';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, LoginComponent, CommonModule,HeaderComponent,FooterComponent],
+  imports: [RouterOutlet, LoginComponent, CommonModule,HeaderComponent,FooterComponent,ChatbotComponent],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.css']
 })

@@ -89,6 +89,15 @@ export class AuthService {
   getProductById(id: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/products/${id}/`);
   }
+//Lấy sản phẩm theo category
+  getProductByCategory(id: string):Observable<any>{
+    return this.http.get(`${this.apiUrl}/products/categories/${id}/products/`)
+  }
+
+  getRelatedProducts(productId: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/products/${productId}/related/`);
+  }
+
 
   createProduct(product: any): Observable<any> {
     const headers = this.getAuthHeaders();
@@ -151,7 +160,7 @@ export class AuthService {
 
   deleteCartItem(item_id: number): Observable<any> {
     const headers = this.getAuthHeaders();
-    return this.http.delete(`${this.apiUrl}/cart/remove/${item_id}/`, { headers });
+    return this.http.delete(`${this.apiUrl}/cart/item/${item_id}/remove/`, { headers });
   }
 
   clearCart(): Observable<any> {
@@ -167,6 +176,7 @@ export class AuthService {
 
   createOrder(orderData: any = {}): Observable<any> {
     const headers = this.getAuthHeaders();
+    // Nếu orderData là undefined/null thì chỉ truyền headers
     return this.http.post(`${this.apiUrl}/orders/checkout/`, orderData, { headers });
   }
 
@@ -287,5 +297,14 @@ export class AuthService {
   getOrderByIdAdmin(orderId: number): Observable<any> {
     const headers = this.getAuthHeaders();
     return this.http.get(`${this.apiUrl}/orders/admin/orders/${orderId}/`, { headers });
+  }
+
+  chatWithBot(message: string, history: any[] = []): Observable<any> {
+    const headers = { 'Content-Type': 'application/json' };
+    return this.http.post(
+      'http://127.0.0.1:8000/chatbot/chat/',
+      { message, history },
+      { headers }
+    );
   }
 }   

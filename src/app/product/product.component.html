@@ -59,6 +59,44 @@
     </div>
 </section>
 <div *ngIf="message" class="alert alert-info mt-3">{{ message }}</div>
+<section class="container pt-15 pb-15 pt-lg-17 pb-lg-20" data-animated-id="4">
+	<div class="text-center"><h2 class="mb-12">You may also like</h2></div>
+	<div class="row" *ngIf="pagedRelatedProducts.length > 0; else noRelated">
+		<div class="col-sm-6 col-lg-4 col-xl-3 mb-4" *ngFor="let item of pagedRelatedProducts">
+			<div class="card card-product grid-2 bg-transparent border-0">
+				<figure class="card-img-top position-relative mb-7 overflow-hidden">
+					<a [routerLink]="['/detail', item.id]" class="hover-zoom-in d-block" [title]="item.name">
+						<img [src]="item.image ? item.image : 'assets/images/products/giay.jpg'" class="img-fluid w-100" [alt]="item.name" width="330" height="440">
+					</a>
+				</figure>
+				<div class="card-body text-center p-0">
+					<span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
+						<ins class="text-decoration-none">{{item.price | currency:'VND':'symbol':'1.0-0'}}</ins>
+					</span>
+					<h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3">
+						<a class="text-decoration-none text-reset" [routerLink]="['/detail', item.id]">{{ item.name }}</a>
+					</h4>
+				</div>
+			</div>
+		</div>
+	</div>
+	<ng-template #noRelated>
+		<div class="text-center text-muted">Không có sản phẩm liên quan.</div>
+	</ng-template>
+	<nav class="d-flex mt-4 justify-content-center" *ngIf="totalRelatedPages > 1">
+		<ul class="pagination m-0">
+			<li class="page-item" [class.disabled]="currentRelatedPage === 1">
+				<a class="page-link" href="#" (click)="goToRelatedPage(currentRelatedPage - 1); $event.preventDefault()" aria-label="Previous">&laquo;</a>
+			</li>
+			<li class="page-item" *ngFor="let page of [].constructor(totalRelatedPages); let i = index" [class.active]="currentRelatedPage === (i+1)">
+				<a class="page-link" href="#" (click)="goToRelatedPage(i+1); $event.preventDefault()">{{i+1}}</a>
+			</li>
+			<li class="page-item" [class.disabled]="currentRelatedPage === totalRelatedPages">
+				<a class="page-link" href="#" (click)="goToRelatedPage(currentRelatedPage + 1); $event.preventDefault()" aria-label="Next">&raquo;</a>
+			</li>
+		</ul>
+	</nav>
+</section>
 </main>
 
 
