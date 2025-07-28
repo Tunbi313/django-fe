@@ -19,6 +19,8 @@ export class ProductManageComponent implements OnInit {
   showDeleteModal: boolean = false;
   productToDelete: any = null;
   showSuccessMessage: boolean = false;
+  selectedCategoryId: string = '';
+  allProducts: any[] = [];
   
   constructor(private authService:AuthService){}
   ngOnInit() : void{
@@ -74,6 +76,27 @@ export class ProductManageComponent implements OnInit {
   cancelDelete() {
     this.showDeleteModal = false;
     this.productToDelete = null;
+  }
+  loadProductsByCategory(categoryId: string): void {
+    this.selectedCategoryId = categoryId;
+    
+    this.authService.getProductByCategory(categoryId).subscribe({
+      next: (data: any) => {
+        const productsArray = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.results)
+            ? data.results
+            : [];
+        this.allProducts = productsArray.map((item: any) => ({
+          ...item,
+          image: item.image ? item.image : 'assets/images/products/giay.jpg'
+        }));
+        
+      },
+      error: (error: any) => {
+        console.error('Lỗi khi tải sản phẩm theo category:', error);
+      }
+    });
   }
 }
 

@@ -77,6 +77,24 @@
     [alt]="product.name" 
     width="330" height="440" >
 </a>
+<div class="position-absolute product-flash z-index-2 ">
+    <span class="badge badge-product-flash" [ngClass]="{
+    'alert-warning': product.status === 'Sale' || product.status === 'sale' || product.status === 'SALE',
+    'alert-danger': product.status === 'Out of stock' || product.status === 'out of stock' || product.status === 'Out_of_stock' || product.status === 'out_of_stock',
+    'alert-success': product.status === 'new' || product.status === 'New' || product.status === 'NEW',
+    'alert-info': product.status !== 'Sale' && product.status !== 'sale' && product.status !== 'SALE' && product.status !== 'Out of stock' && product.status !== 'out of stock' && product.status !== 'Out_of_stock' && product.status !== 'out_of_stock' && product.status !== 'new' && product.status !== 'New' && product.status !== 'NEW'
+  }"
+  [style.background-color]="product.status === 'out_of_stock' ? '#dc3545' : 
+                           (product.status === 'new' || product.status === 'New' || product.status === 'NEW') ? '#198754' : 
+                           (product.status === 'Sale' || product.status === 'sale' || product.status === 'SALE') ? '#ffc107' : ''"
+  [style.color]="product.status === 'out_of_stock' ? 'white' : 
+                (product.status === 'new' || product.status === 'New' || product.status === 'NEW') ? 'white' : 
+                (product.status === 'Sale' || product.status === 'sale' || product.status === 'SALE') ? 'black' : ''">
+  {{ product.status === 'out_of_stock' ? 'Out of stock' : 
+     product.status === 'new' ? 'New' : 
+     product.status === 'New' ? 'New' : 
+     product.status === 'NEW' ? 'New' : product.status }}
+</span></div>
 <div class="position-absolute d-flex z-index-2 product-actions  horizontal">
     <a  class="text-body-emphasis bg-body bg-dark-hover text-light-hover rounded-circle square product-action shadow-sm add_to_cart"
    data-bs-toggle="tooltip" data-bs-placement="top" data-bs-title="Add To Cart"
@@ -98,7 +116,8 @@
 
 	   <div class="card-body text-center p-0">
 <span class="d-flex align-items-center price text-body-emphasis fw-bold justify-content-center mb-3 fs-6">
-        <ins class="text-decoration-none">{{product.price | currency:'VND':'symbol':'1.0-0'}}</ins></span>
+    <del class="text-body fw-500 me-4 fs-13px" *ngIf="product.status === 'Sale' || product.status === 'sale' || product.status === 'SALE'">{{product.price | currency:'VND':'symbol':'1.0-0'}}</del>
+  {{ product.current_price ? (product.current_price | currency:'VND':'symbol':'1.0-0') : (product.price | currency:'VND':'symbol':'1.0-0') }}</span>
 
 	   <h4 class="product-title card-title text-primary-hover text-body-emphasis fs-15px fw-500 mb-3"><a class="text-decoration-none text-reset" [routerLink]="['/detail', product.id]">{{ product.name }}</a></h4>
 	   <div class="d-flex align-items-center fs-12px justify-content-center">

@@ -15,6 +15,7 @@ import { PaidComponent } from './oder/paid/paid.component';
 import { UserListComponent } from './admin/userlist/userlist.component';
 import { OderDetailComponent } from './admin/oder/orderdetail/orderdetail.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
+import { CategoryComponent } from './admin/product-manage/category/category.component';
 
 
 
@@ -35,6 +36,7 @@ export const routes: Routes = [
   {path:'paid/:id', component: PaidComponent },
   {path:'userlist',component:UserListComponent},
   {path:'orderdetail/:id',component:OderDetailComponent},
-  {path:'chatbot',component:ChatbotComponent}
+  {path:'chatbot',component:ChatbotComponent},
+  {path:'category',component:CategoryComponent}
 
 ];

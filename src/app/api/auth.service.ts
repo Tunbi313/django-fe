@@ -307,4 +307,29 @@ export class AuthService {
       { headers }
     );
   }
-}   
+
+  //Lấy tất cả category
+  getAllCategory(): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.get(`${this.apiUrl}/products/categories/`, { headers });
+  }
+
+  //Tạo category
+  createCategory(data: any): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.post(`${this.apiUrl}/products/categories/`, data, { headers });
+  }
+
+  //Cập nhật category
+  updateCategory(categoryId: number, data: any): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.put(`${this.apiUrl}/products/categories/${categoryId}/`, data, { headers });
+  }
+
+  //Xóa category
+  deleteCategory(categoryId: number): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.delete(`${this.apiUrl}/products/categories/${categoryId}/`, { headers });
+  }
+  
+}         

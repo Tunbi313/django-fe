@@ -38,6 +38,13 @@
                                     <label class="mb-4 fs-13px ls-1 fw-bold text-uppercase">description</label>
                                     <textarea placeholder="Type here" class="form-control" rows="4" [(ngModel)]="product.description" name="description"></textarea>
                                 </div>
+                                <div class="col-sm-6 mb-6 px-3">
+                                    <label class="mb-4 fs-13px ls-1 fw-bold text-uppercase " for="category">Category</label>
+                                    <select class="form-select" id="category" [(ngModel)]="product.category" name="category" required>
+                                        <option value="" disabled selected>-- Chọn category --</option>
+                                        <option *ngFor="let cat of categories" [value]="cat.id">{{ cat.name }}</option>
+                                    </select>
+                                </div>
                                 <div class="row">
                                     <div class="col-lg-4">
                                         <div class="mb-8">
@@ -61,7 +68,6 @@
                             </form>
                         </div>
                     </div>
-                    
                     
                     
                 </div>
