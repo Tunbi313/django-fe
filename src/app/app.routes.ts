@@ -16,6 +16,7 @@ import { UserListComponent } from './admin/userlist/userlist.component';
 import { OderDetailComponent } from './admin/oder/orderdetail/orderdetail.component';
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { CategoryComponent } from './admin/product-manage/category/category.component';
+import { DashBoardComponent } from './admin/dashboard/dashboard.component';
 
 
 
@@ -37,6 +38,7 @@ export const routes: Routes = [
   {path:'userlist',component:UserListComponent},
   {path:'orderdetail/:id',component:OderDetailComponent},
   {path:'chatbot',component:ChatbotComponent},
-  {path:'category',component:CategoryComponent}
+  {path:'category',component:CategoryComponent},
+  {path:'dashboard',component:DashBoardComponent}
 
 ];

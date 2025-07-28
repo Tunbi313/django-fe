@@ -20,13 +20,110 @@ export class ProductManageComponent implements OnInit {
   productToDelete: any = null;
   showSuccessMessage: boolean = false;
   selectedCategoryId: string = '';
+  selectedStatus: string = ''; // Thêm biến selectedStatus
   allProducts: any[] = [];
+  categories: any[] = []; // Thêm biến categories
+  filteredProducts: any[] = []; // Thêm để lưu sản phẩm đã lọc
+  
+  // Sale form properties
+  showSaleModal: boolean = false;
+  productToSale: any = null;
+  saleForm = {
+    product: '',
+    discount_percent: '',
+    start_date: '',
+    end_date: ''
+  };
+  saleMessage: string = '';
+  saleError: string = '';
+  allSaleProducts: any[] = []; // Thêm để lưu tất cả sale products
   
   constructor(private authService:AuthService){}
+  
   ngOnInit() : void{
     this.loadProducts();
+    this.loadCategories(); // Load categories
+    this.loadAllSaleProducts(); // Debug: load tất cả sale products
+  }
+
+  loadCategories() {
+    this.authService.getAllCategory().subscribe({
+      next: (data) => {
+        if (Array.isArray(data)) {
+          this.categories = data;
+        } else if (data && Array.isArray(data.results)) {
+          this.categories = data.results;
+        } else if (data && Array.isArray(data.data)) {
+          this.categories = data.data;
+        } else {
+          this.categories = [];
+        }
+        console.log('Categories loaded:', this.categories);
+      },
+      error: (err) => {
+        console.error('Error loading categories:', err);
+        this.categories = [];
+      }
+    });
+  }
+
+  onCategoryChange() {
+    console.log('Category changed to:', this.selectedCategoryId);
+    if (this.selectedCategoryId) {
+      // Load products theo category được chọn
+      this.loadProductsByCategory(this.selectedCategoryId);
+    } else {
+      // Load tất cả products
+      this.loadProducts();
+    }
+  }
+
+  onStatusChange() {
+    console.log('Status changed to:', this.selectedStatus);
+    this.filterProductsByStatus();
+  }
+
+  filterProductsByStatus() {
+    if (!this.selectedStatus) {
+      // Nếu không chọn status, hiển thị tất cả sản phẩm hiện tại
+      this.filteredProducts = [...this.products];
+    } else {
+      // Lọc sản phẩm theo status chính xác từ model Product
+      this.filteredProducts = this.products.filter(product => {
+        const productStatus = product.status?.toLowerCase() || '';
+        const selectedStatusLower = this.selectedStatus.toLowerCase();
+        
+        return productStatus === selectedStatusLower;
+      });
+    }
+    console.log('Filtered products by status:', this.filteredProducts);
+  }
+
+  loadAllSaleProducts() {
+    this.authService.getActiveSaleProducts().subscribe({
+      next: (data) => {
+        console.log('All active sale products:', data);
+        // Lưu danh sách sale products để sử dụng sau
+        if (Array.isArray(data)) {
+          this.allSaleProducts = data;
+        } else if (data && Array.isArray(data.results)) {
+          this.allSaleProducts = data.results;
+        } else if (data && Array.isArray(data.data)) {
+          this.allSaleProducts = data.data;
+        } else {
+          this.allSaleProducts = [];
+        }
+        console.log('Stored sale products:', this.allSaleProducts);
+      },
+      error: (err) => {
+        console.error('Error loading sale products:', err);
+        this.allSaleProducts = [];
+      }
+    });
   }
   loadProducts(): void {
+    this.selectedCategoryId = ''; // Reset category selection
+    this.selectedStatus = ''; // Reset status selection
     this.authService.getAllProducts().subscribe({
       next: (data: any) => {
         // data là mảng sản phẩm
@@ -35,10 +132,13 @@ export class ProductManageComponent implements OnInit {
           ...item,
           image: item.image ? item.image : 'assets/images/products/giay.jpg'
         }));
-        console.log('Products loaded:', this.products);
+        this.filteredProducts = [...this.products]; // Khởi tạo filtered products
+        console.log('All products loaded:', this.products);
       },
       error: (error: any) => {
         console.error('Error loading products:', error);
+        this.products = [];
+        this.filteredProducts = [];
       }
     });
   }
@@ -62,8 +162,8 @@ export class ProductManageComponent implements OnInit {
             this.showSuccessMessage = false;
           }, 3000);
           
-          // Cập nhật lại danh sách sản phẩm
-          this.loadProducts();
+          // Cập nhật lại danh sách sản phẩm theo category hiện tại
+          this.reloadProducts();
         },
         error: (err) => {
           console.error('Lỗi khi xóa sản phẩm', err);
@@ -73,12 +173,33 @@ export class ProductManageComponent implements OnInit {
     }
   }
 
+  // Method để reload products theo category hiện tại
+  reloadProducts() {
+    if (this.selectedCategoryId) {
+      this.loadProductsByCategory(this.selectedCategoryId);
+    } else {
+      this.loadProducts();
+    }
+    // Áp dụng filter status sau khi reload
+    setTimeout(() => {
+      this.filterProductsByStatus();
+    }, 100);
+  }
+
+  // Method để reset tất cả filters
+  resetFilters() {
+    this.selectedCategoryId = '';
+    this.selectedStatus = '';
+    this.loadProducts();
+  }
+
   cancelDelete() {
     this.showDeleteModal = false;
     this.productToDelete = null;
   }
   loadProductsByCategory(categoryId: string): void {
     this.selectedCategoryId = categoryId;
+    this.selectedStatus = ''; // Reset status selection
     
     this.authService.getProductByCategory(categoryId).subscribe({
       next: (data: any) => {
@@ -87,16 +208,147 @@ export class ProductManageComponent implements OnInit {
           : Array.isArray(data?.results)
             ? data.results
             : [];
-        this.allProducts = productsArray.map((item: any) => ({
+        this.products = productsArray.map((item: any) => ({
           ...item,
           image: item.image ? item.image : 'assets/images/products/giay.jpg'
         }));
-        
+        this.filteredProducts = [...this.products]; // Khởi tạo filtered products
+        console.log('Products loaded by category:', this.products);
       },
       error: (error: any) => {
         console.error('Lỗi khi tải sản phẩm theo category:', error);
+        this.products = [];
+        this.filteredProducts = [];
       }
     });
+  }
+
+  onSaleProduct(product: any) {
+    this.productToSale = product;
+    this.saleForm = {
+      product: product.id,
+      discount_percent: '',
+      start_date: new Date().toISOString().slice(0, 16), // timenow format
+      end_date: ''
+    };
+    this.showSaleModal = true;
+    this.saleMessage = '';
+    this.saleError = '';
+    
+    // Kiểm tra xem sản phẩm đã có sale chưa
+    this.checkExistingSale(product.id);
+  }
+
+  checkExistingSale(productId: number) {
+    console.log('Checking sale for product ID:', productId);
+    console.log('Available sale products:', this.allSaleProducts);
+    
+    // Tìm sale product từ danh sách đã load
+    const existingSale = this.allSaleProducts.find(sale => sale.product === productId || sale.product_id === productId);
+    
+    if (existingSale) {
+      console.log('Found existing sale:', existingSale);
+      // Sản phẩm đã có sale, hiển thị thông tin hiện tại
+      this.saleForm = {
+        product: productId.toString(),
+        discount_percent: existingSale.discount_percent ? existingSale.discount_percent.toString() : '',
+        start_date: existingSale.start_date ? new Date(existingSale.start_date).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16),
+        end_date: existingSale.end_date ? new Date(existingSale.end_date).toISOString().slice(0, 16) : ''
+      };
+      this.saleMessage = 'Sản phẩm này đã có sale. Bạn có thể chỉnh sửa hoặc kết thúc sale.';
+      console.log('Updated sale form:', this.saleForm);
+    } else {
+      console.log('No existing sale found in list, trying API call...');
+      // Nếu không tìm thấy trong danh sách, thử gọi API riêng lẻ
+      this.authService.getSaleProductByProductId(productId).subscribe({
+        next: (saleData) => {
+          console.log('Sale data from API:', saleData);
+          if (saleData && (saleData.id || saleData.discount_percent)) {
+            this.saleForm = {
+              product: productId.toString(),
+              discount_percent: saleData.discount_percent ? saleData.discount_percent.toString() : '',
+              start_date: saleData.start_date ? new Date(saleData.start_date).toISOString().slice(0, 16) : new Date().toISOString().slice(0, 16),
+              end_date: saleData.end_date ? new Date(saleData.end_date).toISOString().slice(0, 16) : ''
+            };
+            this.saleMessage = 'Sản phẩm này đã có sale. Bạn có thể chỉnh sửa hoặc kết thúc sale.';
+            console.log('Updated sale form from API:', this.saleForm);
+          } else {
+            console.log('No existing sale found');
+            this.saleMessage = '';
+          }
+        },
+        error: (err) => {
+          console.log('Error checking sale or no sale exists:', err);
+          this.saleMessage = '';
+        }
+      });
+    }
+  }
+
+  submitSaleForm() {
+    if (!this.saleForm.discount_percent || !this.saleForm.end_date) {
+      this.saleError = 'Vui lòng điền đầy đủ thông tin!';
+      return;
+    }
+
+    const discountPercent = Number(this.saleForm.discount_percent);
+    if (discountPercent <= 0 || discountPercent > 100) {
+      this.saleError = 'Phần trăm giảm giá phải từ 1-100%!';
+      return;
+    }
+
+    this.authService.createUpdateSaleProduct(this.saleForm).subscribe({
+      next: (res) => {
+        this.saleMessage = 'Cập nhật sale thành công!';
+        this.showSaleModal = false;
+        this.reloadProducts(); // Reload products theo category hiện tại
+        setTimeout(() => {
+          this.saleMessage = '';
+        }, 3000);
+      },
+      error: (err) => {
+        console.error('Lỗi khi tạo/cập nhật sale:', err);
+        if (err.error && typeof err.error === 'object') {
+          this.saleError = Object.entries(err.error).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join(' | ');
+        } else {
+          this.saleError = 'Có lỗi xảy ra khi tạo/cập nhật sale!';
+        }
+      }
+    });
+  }
+
+  endSale() {
+    if (!this.productToSale) return;
+    
+    if (confirm('Bạn có chắc chắn muốn kết thúc sale cho sản phẩm này?')) {
+      this.authService.deleteSaleProduct(this.productToSale.id).subscribe({
+        next: (res) => {
+          this.saleMessage = 'Đã kết thúc sale thành công!';
+          this.showSaleModal = false;
+          this.reloadProducts(); // Reload products to update status
+          setTimeout(() => {
+            this.saleMessage = '';
+          }, 3000);
+        },
+        error: (err) => {
+          console.error('Lỗi khi kết thúc sale:', err);
+          this.saleError = 'Có lỗi xảy ra khi kết thúc sale!';
+        }
+      });
+    }
+  }
+
+  cancelSale() {
+    this.showSaleModal = false;
+    this.productToSale = null;
+    this.saleForm = {
+      product: '',
+      discount_percent: '',
+      start_date: '',
+      end_date: ''
+    };
+    this.saleMessage = '';
+    this.saleError = '';
   }
 }
 

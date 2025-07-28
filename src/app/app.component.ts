@@ -18,6 +18,6 @@ export class AppComponent {
   constructor(public router: Router) {}
 
   isAdminRoute() {
-    return this.router.url.startsWith('/admin') || this.router.url.startsWith('/add_product') || this.router.url.startsWith('/update_product') || this.router.url.startsWith('/orderList') || this.router.url.startsWith('/userlist') || this.router.url.startsWith('/orderdetail');
+    return this.router.url.startsWith('/admin') || this.router.url.startsWith('/add_product') || this.router.url.startsWith('/update_product') || this.router.url.startsWith('/orderList') || this.router.url.startsWith('/userlist') || this.router.url.startsWith('/orderdetail') || this.router.url.startsWith('/dashboard') || this.router.url.startsWith('/category');
   }
 }

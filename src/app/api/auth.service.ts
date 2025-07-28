@@ -331,5 +331,27 @@ export class AuthService {
     const headers = this.getAuthHeaders();
     return this.http.delete(`${this.apiUrl}/products/categories/${categoryId}/`, { headers });
   }
+
+  // Lấy danh sách sale products active
+  getActiveSaleProducts(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/sale-products/`);
+  }
+
+  // Tạo hoặc cập nhật sale product
+  createUpdateSaleProduct(data: any): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.post(`${this.apiUrl}/sale-products/manage/`, data, { headers });
+  }
+
+  // Lấy thông tin sale của một sản phẩm
+  getSaleProductByProductId(productId: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/sale-products/product/${productId}/`);
+  }
+
+  // Xóa sale product (kết thúc sale)
+  deleteSaleProduct(productId: number): Observable<any> {
+    const headers = this.getAuthHeaders();
+    return this.http.delete(`${this.apiUrl}/sale-products/${productId}/delete/`, { headers });
+  }
   
 }         
