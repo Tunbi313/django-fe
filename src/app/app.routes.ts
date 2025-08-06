@@ -17,6 +17,7 @@ import { OderDetailComponent } from './admin/oder/orderdetail/orderdetail.compon
 import { ChatbotComponent } from './chatbot/chatbot.component';
 import { CategoryComponent } from './admin/product-manage/category/category.component';
 import { DashBoardComponent } from './admin/dashboard/dashboard.component';
+import { ChatManageComponent } from './admin/chatmanage/chatmanage.component';
 
 
 
@@ -39,6 +40,7 @@ export const routes: Routes = [
   {path:'orderdetail/:id',component:OderDetailComponent},
   {path:'chatbot',component:ChatbotComponent},
   {path:'category',component:CategoryComponent},
-  {path:'dashboard',component:DashBoardComponent}
+  {path:'dashboard',component:DashBoardComponent},
+  {path:'chatmanage',component:ChatManageComponent}
 
 ];

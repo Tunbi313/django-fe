@@ -45,7 +45,19 @@ export class ChatbotComponent implements AfterViewChecked {
       this.chatHistory.filter(m => m.sender === 'user').map(m => m.text)
     ).subscribe(
       res => {
-        this.chatHistory.push({ sender: 'bot', text: res.response });
+        let botText = '';
+        if (typeof res.answer === 'string') {
+          botText = res.answer;
+        } else if (typeof res.answer === 'object' && res.answer.answer) {
+          botText = res.answer.answer;
+        } else if (typeof res.response === 'string') {
+          botText = res.response;
+        } else if (typeof res.response === 'object' && res.response.answer) {
+          botText = res.response.answer;
+        } else {
+          botText = JSON.stringify(res);
+        }
+        this.chatHistory.push({ sender: 'bot', text: botText });
       },
       err => {
         this.chatHistory.push({ sender: 'bot', text: 'Có lỗi xảy ra, vui lòng thử lại.' });
