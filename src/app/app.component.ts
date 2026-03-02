@@ -15,6 +15,7 @@ import { ChatbotComponent } from './chatbot/chatbot.component';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  [x: string]: any;
   constructor(public router: Router) {}
 
   isAdminRoute() {

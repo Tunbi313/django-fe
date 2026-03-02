@@ -120,8 +120,8 @@ export class CategoryComponent implements OnInit {
     }
 
     createCategory() {
-        if (!this.category.name || !this.category.slug) {
-            this.error = 'Name and slug are required';
+        if (!this.category.name || !this.category.description) {
+            this.error = 'Name and description are required';
             return;
         }
 
