@@ -33,7 +33,7 @@
                 <a href="#" class="">{{item.product_name}}<span class="text-body"> x{{item.quantity}}</span></a>
             </div>
             <div class="ms-auto">
-                <p class="fs-14px text-body-emphasis mb-0 fw-bold">{{item.price * item.quantity | currency:'USD':'symbol':'1.2-2'}}</p>
+                <p class="fs-14px text-body-emphasis mb-0 fw-bold">{{item.price * item.quantity |currency:'VND':'symbol':'1.0-0'}}</p>
             </div>
         </div>
     </div>
@@ -41,7 +41,7 @@
 <div class="card-body px-10 py-8">
     <div class="d-flex align-items-center mb-2">
         <span>Subtotal:</span>
-        <span class="d-block ms-auto text-body-emphasis fw-bold">{{ order?.total_price | currency:'USD':'symbol':'1.2-2' }}</span>
+        <span class="d-block ms-auto text-body-emphasis fw-bold">{{ order?.total_price |currency:'VND':'symbol':'1.0-0' }}</span>
     </div>
     <div class="d-flex align-items-center">
         <span>Shipping:</span>
@@ -51,7 +51,7 @@
 <div class="card-footer bg-transparent py-5 px-0 mx-10">
     <div class="d-flex align-items-center fw-bold mb-6">
         <span class="text-body-emphasis p-0">Total price:</span>
-        <span class="d-block ms-auto text-body-emphasis fs-4 fw-bold">{{order?.total_price | currency:'USD':'symbol':'1.2-2'}}</span>
+        <span class="d-block ms-auto text-body-emphasis fs-4 fw-bold">{{order?.total_price |currency:'VND':'symbol':'1.0-0'}}</span>
     </div>
     <div class="d-flex align-items-center fw-bold mb-6">
         <span class="text-body-emphasis p-0">Status:</span>

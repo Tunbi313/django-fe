@@ -19,6 +19,7 @@ export class CartItemComponent implements OnInit {
   quantity: number = 1;
   message: string = '';
   deletedItemIds: number[] = [];
+  USD_TO_VND = 25000;
   constructor(private authService: AuthService) {}
 
   ngOnInit(): void {
@@ -136,9 +137,14 @@ export class CartItemComponent implements OnInit {
       this.message = 'Vui lòng thêm đơn hàng vào giỏ!';
       return;
     }
-    // Gọi API checkout
-    this.authService.checkoutOrder().subscribe({
-      next: (order) => {
+    // Tính tổng giá USD
+    const totalUSD = this.cartData.items.reduce((total: number, item: any) => total + (item.product_price * item.quantity), 0);
+    // Quy đổi sang VND
+    const totalVND = Math.round(totalUSD * this.USD_TO_VND);
+    console.log('Checkout data:', { total_price: totalVND });
+    // Gọi API checkout mà không truyền dữ liệu
+    this.authService.createOrder().subscribe({
+      next: (order: any) => {
         // Lưu orderId vào localStorage (xử lý cả trường hợp trả về order.order.id hoặc order.id)
         if (order.order && order.order.id) {
           localStorage.setItem('lastOrderId', order.order.id);
@@ -148,7 +154,8 @@ export class CartItemComponent implements OnInit {
         // Chuyển hướng sang trang checkout
         window.location.href = '/checkout';
       },
-      error: (err) => {
+      error: (err: any) => {
+        console.error('Checkout error:', err);
         this.message = err?.error?.error || 'Có lỗi khi tạo đơn hàng!';
       }
     });

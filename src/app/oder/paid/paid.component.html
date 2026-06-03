@@ -61,7 +61,7 @@
                             <h6 class="mb-4">Order info</h6>
                             <p class="mb-4">
                                 Status: {{ order.status }} <br>
-                                Total: {{ order.total_price | currency:'USD':'symbol':'1.2-2' }}
+                                Total: {{ order.total_price |currency:'VND':'symbol':'1.0-0' }}
                             </p>
                         </div>
                     </div>
@@ -107,9 +107,9 @@
                                                 </span>
                                             </div>
                                         </td>
-                                        <td>{{ item.product_price | currency:'USD':'symbol':'1.2-2' }}</td>
+                                        <td>{{ item.product_price |currency:'VND':'symbol':'1.0-0' }}</td>
                                         <td>{{ item.quantity }}</td>
-                                        <td class="text-end">{{ (item.product_price * item.quantity) | currency:'USD':'symbol':'1.2-2' }}</td>
+                                        <td class="text-end">{{ (item.product_price * item.quantity) |currency:'VND':'symbol':'1.0-0' }}</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -118,7 +118,7 @@
                             <div class="mw-40 w-40">
                                 <div class="d-flex w-100">
                                     <span class="d-inline-block w-50">Subtotal:</span>
-                                    <span class="d-inline-block w-50 text-end fw-normal">{{ order.total_price | currency:'USD':'symbol':'1.2-2' }}</span>
+                                    <span class="d-inline-block w-50 text-end fw-normal">{{ order.total_price |currency:'VND':'symbol':'1.0-0' }}</span>
                                 </div>
                                 <div class="d-flex w-100">
                                     <span class="d-inline-block w-50">Shipping cost:</span>
@@ -126,7 +126,7 @@
                                 </div>
                                 <div class="d-flex w-100 mb-5">
                                     <span class="d-inline-block w-50">Grand total:</span>
-                                    <span class="d-inline-block w-50 text-end fs-5 fw-semibold">{{ order.total_price | currency:'USD':'symbol':'1.2-2' }}</span>
+                                    <span class="d-inline-block w-50 text-end fs-5 fw-semibold">{{ order.total_price |currency:'VND':'symbol':'1.0-0' }}</span>
                                 </div>
                                 <div class="d-flex w-100">
                                     <span class="d-inline-block w-50 text-muted">Status:</span>

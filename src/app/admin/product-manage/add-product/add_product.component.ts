@@ -19,8 +19,10 @@ export class AddProductComponent implements OnInit {
     description: '',
     price: '',
     quantity: '',
-    image: ''
+    image: '',
+    category: '' // Thêm trường category
   };
+  categories: any[] = []; // Thêm biến này
   message = '';
   error = '';
   adminToken: string | null = null;
@@ -32,21 +34,62 @@ export class AddProductComponent implements OnInit {
     this.adminToken = localStorage.getItem('authToken');
     const userInfo = localStorage.getItem('userInfo');
     this.adminInfo = userInfo ? JSON.parse(userInfo) : null;
-    console.log('Admin token:', this.adminToken);
-    console.log('Admin info:', this.adminInfo);
+    // Lấy danh sách category
+    this.authService.getAllCategory().subscribe({
+      next: (data) => {
+        if (Array.isArray(data)) {
+          this.categories = data;
+        } else if (data && Array.isArray(data.results)) {
+          this.categories = data.results;
+        } else if (data && Array.isArray(data.data)) {
+          this.categories = data.data;
+        } else {
+          this.categories = [];
+        }
+      },
+      error: (err) => {
+        this.categories = [];
+        console.error('Lỗi lấy category:', err);
+      }
+    });
   }
 
   onSubmit() {
     this.message = '';
     this.error = '';
-    this.authService.createProduct(this.product).subscribe({
+    const priceNumber = Number(this.product.price);
+    if (isNaN(priceNumber) || priceNumber <= 0) {
+      this.error = 'Giá sản phẩm phải là số dương!';
+      return;
+    }
+    if (priceNumber > 9999999999) {
+      this.error = 'Giá VND không được vượt quá 9.999.999.999!';
+      return;
+    }
+    if (!this.product.category) {
+      this.error = 'Bạn phải chọn category!';
+      return;
+    }
+    // Gửi category_id, giữ nguyên giá VND
+    const productToSend: any = {
+      ...this.product,
+      price: priceNumber,
+      category_id: this.product.category
+    };
+    delete productToSend.category;
+    this.authService.createProduct(productToSend).subscribe({
       next: (res) => {
         this.message = 'Thêm sản phẩm thành công!';
-        // Reset form nếu muốn
-        this.product = { name: '', description: '', price: '', quantity: '', image: '' };
+        this.product = { name: '', description: '', price: '', quantity: '', image: '', category: '' };
       },
       error: (err) => {
-        this.error = 'Thêm sản phẩm thất bại!';
+        if (err.error && err.error.price) {
+          this.error = 'Lỗi giá: ' + err.error.price.join(', ');
+        } else if (err.error && typeof err.error === 'object') {
+          this.error = Object.entries(err.error).map(([k, v]) => `${k}: ${Array.isArray(v) ? v.join(', ') : v}`).join(' | ');
+        } else {
+          this.error = 'Thêm sản phẩm thất bại!';
+        }
         console.error(err);
       }
     });

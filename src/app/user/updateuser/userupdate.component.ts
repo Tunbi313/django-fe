@@ -47,17 +47,25 @@ export class UserUpdateComponent implements OnInit {
   onSubmit() {
     this.error = '';
     this.message = '';
-    const req = this.isNewProfile
-      ? this.authService.createProfile(this.profile)
-      : this.authService.updateProfile(this.profile);
-    req.subscribe({
-      next: (res) => {
-        this.message = 'Cập nhật thành công!';
-        this.isNewProfile = false;
-      },
-      error: (err) => {
-        this.error = err.error?.detail || 'Cập nhật thất bại!';
-      }
-    });
+    if (this.isNewProfile) {
+      this.authService.createProfile(this.profile).subscribe({
+        next: (res: any) => {
+          this.message = 'Tạo profile thành công!';
+          this.isNewProfile = false;
+        },
+        error: (err: any) => {
+          this.error = err.error?.detail || 'Tạo profile thất bại!';
+        }
+      });
+    } else {
+      this.authService.updateProfile(this.profile).subscribe({
+        next: (res: any) => {
+          this.message = 'Cập nhật thành công!';
+        },
+        error: (err: any) => {
+          this.error = err.error?.detail || 'Cập nhật thất bại!';
+        }
+      });
+    }
   }
 }

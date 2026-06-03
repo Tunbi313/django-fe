@@ -4,10 +4,8 @@
             <div class="d-flex px-6 px-xl-10 w-100 border-bottom py-7 justify-content-between">
 
                 <a href="/" class="navbar-brand py-4">
-                    <img class="light-mode-img" src="../assets/images/others/logo.png" width="179"
-                        height="26" alt="Glowing - Bootstrap 5 HTML Templates">
-                    <img class="dark-mode-img" src="../assets/images/others/logo-white.png" width="179"
-                        height="26" alt="Glowing - Bootstrap 5 HTML Templates"></a>
+                    <span class="light-mode-img fw-bold ls-1 fs-5 text-body-emphasis">Tiệm Tái Sinh</span>
+                    <span class="dark-mode-img fw-bold ls-1 fs-5 text-body-emphasis">Tiệm Tái Sinh</span></a>
 
                 <div class="ml-auto d-flex align-items-center ">
                     <div class="d-flex align-items-center d-xl-none">
@@ -96,6 +94,14 @@
                 </form>
                 <ul class="list-group list-group-flush list-group-no-border w-100 p-6">
                     <li class="list-group-item px-0 py-0 sidebar-item mb-3 border-0">
+                        <a href="/dashboard" class="text-heading text-decoration-none lh-1 sidebar-link py-5 px-6 d-flex align-items-center" title="Dashboard">
+                                <span class="sidebar-item-icon w-40px d-inline-block text-muted">
+                                    <i class="fas fa-home-lg-alt"></i>
+                                </span>
+                            <span class="sidebar-item-text fs-14px fw-semibold">Dashboard</span>
+                        </a>
+                    </li>
+                    <li class="list-group-item px-0 py-0 sidebar-item mb-3 border-0">
                     </li>
 
                     <li class="list-group-item px-0 py-0 sidebar-item mb-3 has-children border-0">
@@ -139,18 +145,29 @@
 
 
                     <li class="list-group-item px-0 py-0 sidebar-item mb-3 has-children border-0">
-                        <a [routerLink]="['/add_product']"
-                            class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative"
-                            data-bs-toggle="collapse" aria-expanded="false" title="Add Product">
-                            <span class="sidebar-item-icon d-inline-block w-40px text-muted">
-                                <i class="fas fa-plus-square"></i>
-                            </span>
-                            
-                            <span class="sidebar-item-text fs-14px fw-semibold">Add Product</span>
-                            
+                        <a href="#add_product" class="text-heading text-decoration-none lh-1 d-flex sidebar-link align-items-center py-5 px-6 position-relative" data-bs-toggle="collapse" aria-expanded="true" title="Add Product">
+                                <span class="sidebar-item-icon d-inline-block w-40px text-muted">
+                                   <i class="fas fa-plus-square"></i>
+                                </span>
+                                <span class="sidebar-item-text fs-14px fw-semibold">Add Product</span>
+                                <span class="position-absolute top-50 end-5 translate-middle-y"><i class="far fa-angle-down"></i></span>
                         </a>
-                        
+                        <div class="menu-collapse collapse show" id="add_product" style="">
+                            <ul class="sub-menu list-unstyled"><li class="sidebar-item">
+                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold" [routerLink]="['/add_product']" title="Add Product 1">Add Product</a>
+                                </li><li class="sidebar-item">
+                                    <a class="sidebar-link pe-5 ps-8 py-5 lh-1 text-decoration-none fs-14px fw-semibold" [routerLink]="['/category']" title="Add Product 2">Add Category</a>
+                                </li></ul>
+                        </div>
                     </li>
+                    <li class="list-group-item px-0 py-0 sidebar-item mb-3 border-0">
+							<a [routerLink]="['/chatmanage']" class="text-heading text-decoration-none lh-1 sidebar-link py-5 px-6 d-flex align-items-center" title="Reivews">
+									<span class="sidebar-item-icon w-40px d-inline-block text-muted">
+										<i class="fas fa-comment-alt"></i>
+									</span>
+								<span class="sidebar-item-text fs-14px fw-semibold">Manage Messages</span>
+							</a>
+						</li>
 
                 </ul>
             </div>
